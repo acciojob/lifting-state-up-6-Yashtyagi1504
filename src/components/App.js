@@ -3,25 +3,37 @@ import './../styles/App.css';
 import TodoList from "./TodoList";
 
 const App = () => {
-  const [todos, setTodos] = useState([
-    { id: 1, text: "Learn React", completed: false },
-    { id: 2, text: "Build a React app", completed: false },
-    { id: 3, text: "Deploy the React app", completed: false }
-  ]);
+    // Correct useState usage: [stateValue, stateSetter]
+    // Use more descriptive state: 'completed: false' initially
+    // Add unique IDs for better handling than index
+    const [todos, setTodos] = useState([
+        { id: 1, text: "Learn React", completed: false },
+        { id: 2, text: "Build a React app", completed: false },
+        { id: 3, text: "Deploy the React app", completed: false }
+    ]);
 
-  const handleComplete = (id) => {
-    setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, completed: true } : todo
-    ));
-  };
+    // Define the handler function in the parent component
+    const handleComplete = (idToComplete) => {
+        // Create the new array with the updated item
+        const updatedTodos = todos.map(todo => {
+            if (todo.id === idToComplete) {
+                // Return a *new* object with completed set to true
+                return { ...todo, completed: true };
+            }
+            return todo; // Return unchanged todo for other items
+        });
+        // Use the state setter function to update the state
+        setTodos(updatedTodos);
+    };
 
-  return (
-    <div>
-      <h1>Parent Component</h1>
-      <TodoList todos={todos} handleComplete={handleComplete} />
-    </div>
-  );
-};
+    return (
+        <div id="main"> {/* Ensure the main div has id="main" if tests rely on it */}
+            <h1>Parent Component</h1>
+            {/* Pass the state array and the actual handler function */}
+            <TodoList todos={todos} handleComplete={handleComplete} />
+        </div>
+    );
+}
 
 export default App;
 
